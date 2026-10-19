@@ -29,6 +29,26 @@ button:disabled {
   opacity: 0.65;
 }
 
+form {
+  display: grid;
+  gap: 0.6rem;
+  margin: 1.5rem 0;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 0.6rem;
+  font: inherit;
+  border: 1px solid #9ca3af;
+  border-radius: 0.3rem;
+}
+
+textarea {
+  min-height: 7rem;
+  resize: vertical;
+}
+
 #status.success {
   color: #166534;
 }
