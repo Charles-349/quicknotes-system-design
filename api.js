@@ -27,10 +27,16 @@ function createNoteElement(note) {
   const item = document.createElement("li");
   const title = document.createElement("h2");
   const body = document.createElement("p");
+  const deleteButton = document.createElement("button");
 
   title.textContent = note.title;
   body.textContent = note.body;
-  item.append(title, body);
+  deleteButton.textContent = "Delete";
+  deleteButton.type = "button";
+  deleteButton.addEventListener("click", () =>
+    deleteNote(note.id, item, deleteButton),
+  );
+  item.append(title, body, deleteButton);
   return item;
 }
 
@@ -62,6 +68,28 @@ async function loadNotes() {
     setStatus("Sorry, we couldn't load notes. Please try again.", "error");
   } finally {
     loadButton.disabled = false;
+  }
+}
+
+async function deleteNote(noteId, item, deleteButton) {
+  deleteButton.disabled = true;
+  setStatus("Deleting note...");
+
+  try {
+    await request(`${API_URL}/${noteId}`, { method: "DELETE" });
+
+    // JSONPlaceholder simulates DELETE; remove locally and let a later GET show the sample data again.
+    item.remove();
+    if (notesList.children.length === 0) {
+      const emptyMessage = document.createElement("li");
+      emptyMessage.textContent = "No notes found.";
+      notesList.append(emptyMessage);
+    }
+    setStatus("Note deleted.", "success");
+  } catch {
+    setStatus("Sorry, we couldn't delete this note. Please try again.", "error");
+  } finally {
+    deleteButton.disabled = false;
   }
 }
 
